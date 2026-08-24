@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /saved/
+
+Sitemap: https://eugenix.dev/sitemap.xml

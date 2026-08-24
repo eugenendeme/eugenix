@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="description" content="View published resource metadata and securely download authenticated EugenIX engineering resources.">
+    <title>Resource Detail | EugenIX</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/styles/main.css?v=20260824r1">
+    <link rel="stylesheet" href="/styles/resources.css?v=20260824r3">
+    <script src="/scripts/public-config.js"></script>
+    <script src="/scripts/vendor/supabase.js"></script>
+    <script type="module" src="/scripts/resource-detail.js?v=20260824r3"></script>
+  </head>
+  <body class="page page-resource-detail">
+    <a class="skip-link" href="#resource-document">Skip to resource detail</a>
+    <header class="site-header resource-header" data-site-header>
+      <div class="container site-header__inner">
+        <a class="wordmark" href="/" aria-label="EugenIX home"><span>EUGEN</span><span class="wordmark__ix">IX</span></a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation" data-menu-toggle>
+          <span class="menu-toggle__label" aria-hidden="true">Menu</span><span class="menu-toggle__icon" aria-hidden="true"><span></span><span></span></span>
+        </button>
+        <nav class="primary-nav resource-nav" id="primary-navigation" aria-label="Primary" data-primary-nav>
+          <div class="primary-nav__meta" aria-hidden="true"><span>LIBRARY / NAV</span><span>EUGENIX.DEV</span></div>
+          <ul class="primary-nav__list"><li><a data-nav-link href="/work/"><span>01</span>Work</a></li><li><a data-nav-link href="/resources/" aria-current="page"><span>02</span>Resources</a></li><li><a data-nav-link href="/saved/"><span>03</span>Saved</a></li><li><a data-nav-link href="/#contact"><span>04</span>Contact</a></li></ul>
+          <div class="archive-auth" data-auth-root>
+            <p data-auth-loading>AUTH / CHECKING</p>
+            <div data-auth-signed-out hidden><button type="button" data-auth-sign-in>Continue with Google</button></div>
+            <div data-auth-signed-in hidden><span data-auth-name></span><button type="button" data-auth-sign-out>Sign out</button></div>
+            <p class="archive-auth__status" data-auth-status aria-live="polite"></p>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main class="resource-detail-main" id="resource-document">
+      <div class="container">
+        <a class="resource-back" href="/resources/"><span aria-hidden="true">←</span> Back to resources</a>
+        <div class="resource-detail-layout">
+          <div class="resource-detail-stage">
+            <div class="archive-state resource-detail-state" data-detail-loading role="status"><p class="archive-state__code">RESOURCE / RESOLVING SLUG</p><h1>Opening resource record…</h1><p>Loading public metadata from the engineering archive.</p></div>
+            <div class="archive-state resource-detail-state" data-detail-error role="status" aria-live="polite" hidden><p class="archive-state__code">RESOURCE / QUERY UNAVAILABLE</p><h1>Resource data is unavailable.</h1><p data-state-message>The resource could not be loaded. Check your connection and try again.</p></div>
+            <div class="archive-state resource-detail-state" data-detail-missing role="status" aria-live="polite" hidden><p class="archive-state__code">RESOURCE / NOT FOUND</p><h1>No published resource found.</h1><p data-state-message>This resource could not be found or is not published.</p></div>
+            <article class="resource-document" data-resource-detail hidden></article>
+            <noscript><div class="archive-state resource-detail-state"><p class="archive-state__code">RESOURCE / JAVASCRIPT REQUIRED</p><h1>Live metadata needs JavaScript.</h1><p>Return to the Resource Library for the static archive introduction and category structure.</p></div></noscript>
+          </div>
+
+          <aside class="download-terminal" aria-labelledby="download-title" data-auth-root>
+            <p class="download-terminal__code">SECURE FILE BOUNDARY / PRIVATE STORAGE</p>
+            <h2 id="download-title">Secure download.</h2>
+            <p>Resource metadata is public. Available files use a short-lived signed link after Google authentication.</p>
+            <p class="download-terminal__auth" data-auth-loading>Checking authentication…</p>
+            <div data-auth-signed-out hidden data-download-signed-out><button class="button button--primary" type="button" data-download-sign-in><span>Continue with Google</span><span aria-hidden="true">→</span></button></div>
+            <div data-auth-signed-in hidden data-download-signed-in><p>Signed in as <strong data-auth-name></strong></p><button class="button button--primary" type="button" data-resource-download disabled><span>Download Resource</span><span aria-hidden="true">↓</span></button><button class="download-terminal__signout" type="button" data-auth-sign-out>Sign out</button></div>
+            <p class="download-terminal__status" data-download-status data-auth-status role="status" aria-live="polite"></p>
+          </aside>
+        </div>
+      </div>
+    </main>
+    <footer class="resource-footer"><div class="container"><p>EUGENIX / SECURE RESOURCE RECORD</p><a href="/resources/">Library index →</a></div></footer>
+  </body>
+</html>

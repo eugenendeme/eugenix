@@ -1,0 +1,60 @@
+[build]
+publish = "dist"
+command = "npm run build"
+
+[functions]
+directory = "netlify/functions"
+
+[[headers]]
+for = "/*"
+  [headers.values]
+  Content-Security-Policy = "default-src 'self'; base-uri 'self'; form-action 'self' https://accounts.google.com; frame-ancestors 'none'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data: https://*.supabase.co; font-src 'self'; connect-src 'self' https://*.supabase.co https://accounts.google.com https://www.googleapis.com; frame-src https://accounts.google.com;"
+  Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+  Referrer-Policy = "strict-origin-when-cross-origin"
+  X-Content-Type-Options = "nosniff"
+
+[[redirects]]
+from = "/work"
+to = "/work/"
+status = 301
+force = true
+
+
+
+
+
+[[redirects]]
+from = "/resources/:slug/"
+to = "/resources/[slug]/index.html"
+status = 200
+
+
+
+[[redirects]]
+from = "/admin"
+to = "/admin/"
+status = 301
+force = true
+
+[[redirects]]
+from = "/resume"
+to = "/resume/"
+status = 301
+force = true
+
+[[redirects]]
+from = "/api/contact"
+to = "/.netlify/functions/contact"
+status = 200
+force = true
+
+[[redirects]]
+from = "/api/resource-download"
+to = "/.netlify/functions/resource-download"
+status = 200
+force = true
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200

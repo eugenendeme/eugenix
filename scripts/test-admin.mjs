@@ -1,0 +1,18 @@
+import assert from "node:assert/strict";
+import {readFile} from "node:fs/promises";
+const migration=await readFile(new URL("../supabase/migrations/0006_admin_cms_analytics.sql",import.meta.url),"utf8");
+const client=await readFile(new URL("./admin-data.js",import.meta.url),"utf8");
+const ui=await readFile(new URL("./admin.js",import.meta.url),"utf8");
+assert.match(migration,/current_user_is_admin\(\)/);
+assert.match(migration,/if not public\.is_admin\(auth\.uid\(\)\)/);
+assert.match(migration,/set search_path = ''/);
+assert.match(migration,/downloads are owner readable/);
+assert.equal(migration.includes('alter table public.resource_bookmarks'),false);
+assert.equal(client.includes("SUPABASE_SERVICE_ROLE_KEY"),false);
+assert.equal(client.includes("localStorage"),false);
+assert.equal(client.includes("user_id"),false);
+assert.match(client,/storage\.from\(BUCKET\)\.upload/);
+assert.match(client,/\.from\("resources"\)\.insert/);
+assert.equal(ui.includes("innerHTML"),false);
+assert.equal(ui.includes("@"),false);
+console.log("Admin CMS and analytics boundary assertions passed.");

@@ -1,0 +1,18 @@
+{
+  "name": "eugenix-tech",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "build": "node --env-file-if-exists=.env scripts/build-public.mjs",
+    "dev": "node scripts/dev-server.mjs",
+    "test:saved": "node scripts/test-saved.mjs",
+    "test:admin": "node scripts/test-admin.mjs",
+    "test:production": "npm run build && node scripts/test-production.mjs && node scripts/scan-public-secrets.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.60.0"
+  },
+  "devDependencies": {
+    "supabase": "^2.115.0"
+  }
+}

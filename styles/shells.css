@@ -1,0 +1,21 @@
+/* Transitional route-shell styles; full page designs remain out of Phase 02 scope. */
+.shell { width: 100%; max-width: 100%; margin-inline: auto; padding: 1.25rem var(--gutter) 4rem; }
+.shell--center { display: grid; min-height: 100vh; place-items: center; }
+.topbar { display: flex; min-width: 0; align-items: flex-start; flex-direction: column; justify-content: space-between; gap: 1rem; min-height: 4.5rem; border-bottom: 1px solid var(--color-border); padding-block: 1rem; }
+.brand { display: inline-flex; align-items: center; color: var(--color-text); font-family: var(--font-display); font-weight: 900; letter-spacing: -0.05em; text-decoration: none; text-transform: uppercase; }
+.brand-mark { width: 0.42rem; height: 0.42rem; margin-right: 0.55rem; background: var(--color-accent); }
+.nav { display: flex; width: 100%; min-width: 0; flex-wrap: wrap; justify-content: space-between; gap: 0.4rem 1.25rem; }
+.nav a { display: inline-flex; min-height: 2.75rem; align-items: center; color: var(--color-muted); font-size: var(--text-sm); text-decoration: none; }
+.nav a:hover, .nav a[aria-current="page"] { color: var(--color-accent); }
+.card, .panel { margin-top: clamp(3rem, 12vh, 8rem); border: 1px solid var(--color-border); padding: clamp(1.5rem, 5vw, 4rem); background: var(--color-surface); }
+.shell--center .panel { margin-top: 0; }
+.card h1, .panel h1 { max-width: 18ch; font-family: var(--font-display); font-size: clamp(2.2rem, 6vw, 5rem); letter-spacing: -0.06em; line-height: 0.95; text-transform: uppercase; }
+.eyebrow { margin-bottom: 1rem; color: var(--color-accent); font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: 0.12em; text-transform: uppercase; }
+.lede { max-width: 58ch; margin-top: 1.5rem; color: var(--color-muted); }
+@media (min-width: 40rem) {
+  .topbar { align-items: center; flex-direction: row; gap: 1.5rem; padding-block: 0; }
+  .nav { width: auto; justify-content: flex-start; }
+}
+@media (min-width: 80rem) {
+  .shell { max-width: 72rem; }
+}

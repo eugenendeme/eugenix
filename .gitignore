@@ -1,0 +1,17 @@
+node_modules/
+dist/
+build/
+.netlify/
+.supabase/
+.env
+.env.local
+.env.*.local
+coverage/
+*.log
+*.tmp
+*.cache
+Thumbs.db
+.DS_Store
+
+artifacts/
+supabase/.temp/

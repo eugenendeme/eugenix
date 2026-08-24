@@ -30,11 +30,7 @@ status = 200
 
 
 
-[[redirects]]
-from = "/admin"
-to = "/admin/"
-status = 301
-force = true
+
 
 [[redirects]]
 from = "/resume"

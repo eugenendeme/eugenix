@@ -19,6 +19,7 @@ assert.deepEqual(migrationNames, [
   "20260824123339_grant_data_api_privileges.sql",
   "20260824125736_grant_admin_cms_table_privileges.sql",
   "20260824160632_grant_service_role_resource_access.sql",
+  "20260824210758_fix_is_admin_parameter_shadowing.sql",
 ]);
 
 

@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://eugenix.dev/</loc></url>
   <url><loc>https://eugenix.dev/work/</loc></url>
+  <url><loc>https://eugenix.dev/work/notch/</loc></url>
+  <url><loc>https://eugenix.dev/work/campusgig/</loc></url>
+  <url><loc>https://eugenix.dev/work/signal-strength/</loc></url>
   <url><loc>https://eugenix.dev/resources/</loc></url>
   <url><loc>https://eugenix.dev/resume/</loc></url>
+  <url><loc>https://eugenix.dev/privacy/</loc></url>
+  <url><loc>https://eugenix.dev/terms/</loc></url>
 </urlset>

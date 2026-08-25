@@ -2,6 +2,7 @@ const { createClient } = require("@supabase/supabase-js");
 
 const MAX_BODY_BYTES = 4000;
 const DOWNLOAD_TTL_SECONDS = 300;
+const AUTH_FRESHNESS_WINDOW_MS = 48 * 60 * 60 * 1000;
 const RESOURCE_BUCKET = "resources";
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -52,6 +53,23 @@ async function verifyUser({ supabaseUrl, publishableKey, token }) {
 
   return response.json();
 }
+
+function isAuthenticationFresh(lastSignInAt, nowMs = Date.now()) {
+  if (typeof lastSignInAt !== "string" || !lastSignInAt.trim()) {
+    return false;
+  }
+
+  const lastSignInMs = Date.parse(lastSignInAt);
+
+  if (!Number.isFinite(lastSignInMs) || !Number.isFinite(nowMs)) {
+    return false;
+  }
+
+  const authenticationAgeMs = nowMs - lastSignInMs;
+  return authenticationAgeMs >= 0 && authenticationAgeMs < AUTH_FRESHNESS_WINDOW_MS;
+}
+
+exports.isAuthenticationFresh = isAuthenticationFresh;
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -135,6 +153,13 @@ exports.handler = async (event) => {
   if (!user || !user.id) {
     return json(401, {
       error: "Authentication required",
+    });
+  }
+
+  if (!isAuthenticationFresh(user.last_sign_in_at)) {
+    return json(401, {
+      error: "Reauthentication required",
+      code: "reauth_required",
     });
   }
 

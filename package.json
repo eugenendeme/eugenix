@@ -7,6 +7,7 @@
     "dev": "node scripts/dev-server.mjs",
     "test:saved": "node scripts/test-saved.mjs",
     "test:admin": "node scripts/test-admin.mjs",
+    "test:download-auth": "node scripts/test-download-auth.mjs",
     "test:production": "npm run build && node scripts/test-production.mjs && node scripts/scan-public-secrets.mjs"
   },
   "dependencies": {

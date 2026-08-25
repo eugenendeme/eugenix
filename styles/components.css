@@ -123,6 +123,24 @@
   .button--primary:hover { border-color: var(--color-accent-hover); background: var(--color-accent-hover); }
   .button--secondary:hover { border-color: var(--color-muted); background: var(--color-surface-raised); }
 }
+@media (max-width: 63.999rem) {
+  body.menu-open .site-header { background: var(--color-bg); backdrop-filter: none; }
+  body > .primary-nav {
+    position: fixed;
+    z-index: var(--z-menu);
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: var(--color-bg);
+  }
+  @supports (height: 100dvh) {
+    body > .primary-nav { height: 100dvh; min-height: 100dvh; }
+  }
+}
 @media (min-width: 64rem) {
   .site-header__inner { gap: var(--space-5); }
   .menu-toggle { display: none; }

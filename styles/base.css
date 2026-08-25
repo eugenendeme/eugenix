@@ -19,7 +19,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
-body.menu-open { overflow: hidden; }
+html.menu-open, body.menu-open { overflow: hidden; overscroll-behavior: none; }
 a { color: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { color: inherit; font: inherit; }

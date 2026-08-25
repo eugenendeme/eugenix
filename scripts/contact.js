@@ -101,7 +101,7 @@ export function initContactForm() {
 
       form.reset();
       renderErrors(form, {});
-      setState(form, "success", "Message accepted. Thank you—I’ll respond as soon as I can.");
+      setState(form, "success", "Message accepted. Thank you. I’ll respond as soon as I can.");
     } catch {
       setState(form, "error", "The secure message route is unavailable. Please email me directly at ndemeeugene237@gmail.com.");
     }

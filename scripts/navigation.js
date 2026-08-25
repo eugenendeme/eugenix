@@ -6,14 +6,23 @@ export function initNavigation() {
   const navigation = document.querySelector("[data-primary-nav]");
   if (!header || !toggle || !navigation) return;
 
+  const navigationParent = navigation.parentNode;
+  const navigationNextSibling = navigation.nextSibling;
   const menuLinks = [...navigation.querySelectorAll("a[href]")];
+  const backgroundElements = [...document.body.children].filter((element) => element !== header);
+  const placeNavigation = () => {
+    if (mobileMenuQuery.matches) header.after(navigation);
+    else navigationParent.insertBefore(navigation, navigationNextSibling);
+  };
   const menuFocusables = () => [toggle, ...navigation.querySelectorAll("a[href], button:not([disabled])")]
     .filter((element) => !element.hidden && !element.closest("[hidden]") && getComputedStyle(element).visibility !== "hidden");
   const setMenuState = (isOpen, shouldReturnFocus = false) => {
     navigation.classList.toggle("is-open", isOpen);
     toggle.setAttribute("aria-expanded", String(isOpen));
     toggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
+    document.documentElement.classList.toggle("menu-open", isOpen);
     document.body.classList.toggle("menu-open", isOpen);
+    backgroundElements.forEach((element) => { element.inert = isOpen; });
     if (isOpen) {
       navigation.getBoundingClientRect();
       menuLinks[0]?.focus();
@@ -51,7 +60,10 @@ export function initNavigation() {
 
   mobileMenuQuery.addEventListener("change", (event) => {
     if (!event.matches) setMenuState(false);
+    placeNavigation();
   });
+
+  placeNavigation();
 
   const updateHeader = () => header.classList.toggle("is-scrolled", window.scrollY > 12);
   updateHeader();

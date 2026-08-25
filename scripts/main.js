@@ -1,4 +1,4 @@
-import { initNavigation } from "./navigation.js";
+import { initNavigation } from "./navigation.js?v=20260825r1";
 import { initRevealMotion } from "./motion.js";
 import { initHeroInteraction } from "./hero.js";
 import { initProcess } from "./process.js";

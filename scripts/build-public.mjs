@@ -10,6 +10,7 @@ const supabasePublishableKey = (process.env.SUPABASE_PUBLISHABLE_KEY || process.
 
 const rootFiles = ["index.html", "404.html", "favicon.svg", "robots.txt", "sitemap.xml"];
 const routeDirectories = ["admin", "resources", "saved", "resume", "work"];
+const assetDirectories = ["assets"];
 const runtimeScripts = [
   "admin.js", "admin-data.js", "auth.js", "contact.js", "download-client.js", "hero.js", "main.js",
   "motion.js", "navigation.js", "process.js", "resource-data.js", "resource-detail.js", "resource-filter.js",
@@ -21,6 +22,7 @@ await rm(outputRoot, { recursive: true, force: true });
 await mkdir(join(outputRoot, "scripts", "vendor"), { recursive: true });
 await Promise.all(rootFiles.map((name) => copyFile(join(projectRoot, name), join(outputRoot, name))));
 await Promise.all(routeDirectories.map((name) => cp(join(projectRoot, name), join(outputRoot, name), { recursive: true })));
+await Promise.all(assetDirectories.map((name) => cp(join(projectRoot, name), join(outputRoot, name), { recursive: true })));
 await cp(join(projectRoot, "styles"), join(outputRoot, "styles"), { recursive: true });
 await Promise.all(runtimeScripts.map((name) => copyFile(join(projectRoot, "scripts", name), join(outputRoot, "scripts", name))));
 await copyFile(supabaseBundle, join(outputRoot, "scripts", "vendor", "supabase.js"));

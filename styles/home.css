@@ -68,8 +68,6 @@
 .hero__portrait-head, .hero__portrait-body { position: absolute; left: 50%; display: block; background: linear-gradient(130deg, #2d2d2d, #161616 70%); transform: translateX(-50%); }
 .hero__portrait-head { top: 0; width: 20%; max-width: 4.5rem; aspect-ratio: 0.78; border-radius: 47% 53% 42% 46%; }
 .hero__portrait-body { bottom: -7%; width: 54%; max-width: 12rem; aspect-ratio: 0.88; border-radius: 48% 48% 8% 8%; }
-.hero__portrait-note { position: absolute; right: 0.65rem; bottom: 0.65rem; left: 0.65rem; display: flex; justify-content: space-between; gap: 0.5rem; color: var(--color-muted); font-family: var(--font-mono); font-size: 0.56rem; letter-spacing: 0.06em; }
-.hero__portrait-note span:last-child { color: var(--color-accent); }
 .hero__details { position: relative; z-index: 4; display: grid; width: 100%; grid-template-columns: minmax(0, 1fr); gap: 0.9rem; margin-top: 1.15rem; }
 .hero__details > p { width: 100%; max-width: 39ch; color: #b4b4b6; font-size: clamp(0.94rem, 3.5vw, 1rem); line-height: 1.6; }
 .hero__location { display: flex; width: 100%; justify-content: space-between; gap: 1.25rem; font-family: var(--font-mono); font-size: clamp(0.68rem, 2.8vw, 0.76rem); letter-spacing: 0.06em; text-transform: uppercase; }
@@ -126,7 +124,6 @@
   .hero__portrait-silhouette { inset: 12% 8% 0; }
   .hero__portrait-head { top: 6%; width: 39%; max-width: none; }
   .hero__portrait-body { width: 91%; max-width: none; }
-  .hero__portrait-note { font-size: clamp(0.5rem, 0.55vw, 0.68rem); }
   .hero__details { grid-column: 1; grid-template-columns: minmax(12rem, 30rem) auto; align-items: end; gap: clamp(1.5rem, 4vw, 5rem); margin-top: 0; }
   .hero__details > p { max-width: 42ch; color: var(--color-muted); font-size: clamp(0.9rem, 1vw, 1.05rem); }
   .hero__location { width: auto; justify-content: start; gap: clamp(1rem, 2vw, 2.5rem); font-size: var(--text-xs); }

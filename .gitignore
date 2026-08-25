@@ -15,3 +15,6 @@ Thumbs.db
 
 artifacts/
 supabase/.temp/
+
+# Local source images
+my images/

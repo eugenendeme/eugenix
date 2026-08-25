@@ -1,3 +1,5 @@
+import { addButtonIcon, showFeedback } from "./feedback.js";
+
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function valueOf(form, name) {
@@ -53,12 +55,16 @@ function setState(form, state, message = "") {
   form.dataset.state = state;
   if (submit instanceof HTMLButtonElement) submit.disabled = state === "submitting";
   if (label) label.textContent = state === "submitting" ? "Sending…" : "Send Message";
-  if (status) status.textContent = message;
+  if (status && message) {
+    const titles = { submitting: "Sending your message", success: "Message sent successfully", error: "Message could not be sent" };
+    showFeedback(status, { state: state === "submitting" ? "loading" : state, title: titles[state] || "Contact update", message });
+  }
 }
 
 export function initContactForm() {
   const form = document.querySelector("[data-contact-form]");
   if (!(form instanceof HTMLFormElement)) return;
+  addButtonIcon(form.querySelector("[data-contact-submit]"), "send");
 
   form.noValidate = true;
   form.addEventListener("submit", async (event) => {
@@ -74,7 +80,7 @@ export function initContactForm() {
       return;
     }
 
-    setState(form, "submitting", "Sending your message securely…");
+    setState(form, "submitting", "Sending your message…");
 
     try {
       const response = await fetch(form.action, {
@@ -101,9 +107,9 @@ export function initContactForm() {
 
       form.reset();
       renderErrors(form, {});
-      setState(form, "success", "Message accepted. Thank you. I’ll respond as soon as I can.");
+      setState(form, "success", "Thank you. Your message was sent, and I’ll respond as soon as I can.");
     } catch {
-      setState(form, "error", "The secure message route is unavailable. Please email me directly at ndemeeugene237@gmail.com.");
+      setState(form, "error", "The contact form is unavailable. Please email me directly at ndemeeugene237@gmail.com.");
     }
   });
 }

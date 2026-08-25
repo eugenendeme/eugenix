@@ -25,6 +25,36 @@ export function downloadErrorMessage(status) {
   return messages[status] || "The download could not be prepared. Please try again.";
 }
 
+export function downloadFailure(result) {
+  if (result?.status === 401 && result?.payload?.code === "reauth_required") {
+    return {
+      kind: "reauth",
+      title: "Sign in again to continue",
+      message: "For your security, please sign in again before downloading this file.",
+      actionLabel: "Sign in again",
+    };
+  }
+  if (result?.status === 401) {
+    return {
+      kind: "authentication",
+      title: "Your session has expired",
+      message: "Sign in again to download this file.",
+    };
+  }
+  if (result?.status === 404) {
+    return {
+      kind: "unavailable",
+      title: "Resource unavailable",
+      message: "This resource is no longer available.",
+    };
+  }
+  return {
+    kind: "error",
+    title: "Download could not start",
+    message: downloadErrorMessage(result?.status),
+  };
+}
+
 export function safeSignedUrl(value, allowedOrigin = "") {
   if (typeof value !== "string") return null;
   try {

@@ -13,7 +13,7 @@ const routeDirectories = ["admin", "privacy", "resources", "saved", "resume", "t
 const assetDirectories = ["assets"];
 const runtimeScripts = [
   "admin.js", "admin-data.js", "auth.js", "contact.js", "download-client.js", "hero.js", "main.js",
-  "motion.js", "navigation.js", "process.js", "resource-data.js", "resource-detail.js", "resource-filter.js",
+  "feedback.js", "motion.js", "navigation.js", "process.js", "resource-data.js", "resource-detail.js", "resource-filter.js",
   "resources.js", "resource-shell.js", "saved.js", "saved-controls.js", "saved-data.js", "saved-filter.js",
   "saved-store.js", "supabase-client.js",
 ];

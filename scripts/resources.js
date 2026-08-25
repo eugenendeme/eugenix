@@ -1,8 +1,8 @@
-import { initResourceShell } from "./resource-shell.js";
+import { initResourceShell } from "./resource-shell.js?v=20260825r1";
 import { fetchCategories, fetchPublishedResources } from "./resource-data.js";
 import { isSupabaseConfigured } from "./supabase-client.js";
 import { categoryOf, filterAndSortResources } from "./resource-filter.js";
-import { completePendingSave, configureSaveButton, initSavedControls, saveReturnPath } from "./saved-controls.js";
+import { completePendingSave, configureSaveButton, initSavedControls, saveReturnPath } from "./saved-controls.js?v=20260825r1";
 
 const FALLBACK_CATEGORIES = [
   { slug: "documentation", name: "Documentation" },
@@ -123,7 +123,7 @@ function renderResources() {
   list.replaceChildren(...resources.map(resourceRow));
   list.hidden = resources.length === 0;
   empty.hidden = resources.length !== 0;
-  if (count) count.textContent = `${resources.length} ${resources.length === 1 ? "record" : "records"}`;
+  if (count) count.textContent = `${resources.length} ${resources.length === 1 ? "resource" : "resources"}`;
 }
 
 async function initCatalog() {

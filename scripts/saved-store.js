@@ -1,4 +1,4 @@
-import { getCurrentSession, onAuthStateChange, signInWithGoogle } from "./auth.js";
+import { getCurrentSession, onAuthStateChange, signInWithGoogle } from "./auth.js?v=20260825r1";
 import { fetchSavedResourceIds, saveResource, unsaveResource } from "./saved-data.js";
 
 const listeners = new Set();

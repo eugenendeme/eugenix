@@ -1,9 +1,10 @@
-import { getCurrentSession, onAuthStateChange, signInWithGoogle } from "./auth.js";
+import { getCurrentSession, onAuthStateChange, signInWithGoogle } from "./auth.js?v=20260825r1";
 import { fetchPublishedResourceBySlug } from "./resource-data.js";
-import { initResourceShell } from "./resource-shell.js";
+import { initResourceShell } from "./resource-shell.js?v=20260825r1";
 import { isSupabaseConfigured } from "./supabase-client.js";
-import { downloadErrorMessage, requestResourceDownload, safeSignedUrl } from "./download-client.js";
-import { completePendingSave, configureSaveButton, initSavedControls, saveReturnPath } from "./saved-controls.js";
+import { downloadFailure, requestResourceDownload, safeSignedUrl } from "./download-client.js?v=20260825r1";
+import { completePendingSave, configureSaveButton, initSavedControls, saveReturnPath } from "./saved-controls.js?v=20260825r1";
+import { addButtonIcon, showFeedback } from "./feedback.js";
 
 let resource = null;
 
@@ -94,7 +95,17 @@ function updateDownloadGate(session) {
   document.querySelectorAll("[data-download-signed-in]").forEach((element) => { element.hidden = !session; });
   const status = document.querySelector("[data-download-status]");
   if (session && new URLSearchParams(window.location.search).get("download") === "1" && status) {
-    status.textContent = "Sign-in complete. Resume your secure download below.";
+    showFeedback(status, { state: "success", title: "Signed in successfully", message: "Select Download Resource when you are ready to continue." });
+  }
+}
+
+async function startReauthentication(status) {
+  showFeedback(status, { state: "loading", title: "Opening Google sign-in", message: "You will return to this resource after signing in." });
+  try {
+    await signInWithGoogle(`${window.location.pathname}?download=1`);
+  } catch (error) {
+    const unavailable = error instanceof Error && error.message === "AUTH_NOT_CONFIGURED";
+    showFeedback(status, { state: "error", title: "Sign-in could not start", message: unavailable ? "Google sign-in is not configured in this environment." : "Please try again." });
   }
 }
 
@@ -103,34 +114,40 @@ async function startDownload() {
   const button = document.querySelector("[data-resource-download]");
   const session = getCurrentSession();
   if (!resource) {
-    if (status) status.textContent = "This resource is not available for download.";
+    showFeedback(status, { state: "error", title: "Resource unavailable", message: "This resource is not available for download." });
     return;
   }
   if (!session) {
     try {
       const target = `${window.location.pathname}?download=1`;
+      showFeedback(status, { state: "loading", title: "Opening Google sign-in", message: "You will return to this resource after signing in." });
       await signInWithGoogle(target);
     } catch (error) {
-      if (status) status.textContent = error instanceof Error && error.message === "AUTH_NOT_CONFIGURED" ? "Google sign-in is not configured in this environment." : "Google sign-in could not be started.";
+      showFeedback(status, { state: "error", title: "Sign-in could not start", message: error instanceof Error && error.message === "AUTH_NOT_CONFIGURED" ? "Google sign-in is not configured in this environment." : "Please try again." });
     }
     return;
   }
 
   if (button) button.disabled = true;
-  if (status) status.textContent = "Preparing a short-lived secure download…";
+  showFeedback(status, { state: "loading", title: "Preparing secure download", message: "Getting your download ready." });
   try {
     const result = await requestResourceDownload({ resourceId: resource.id, accessToken: session.access_token });
     if (!result.ok) {
-      if (status) status.textContent = downloadErrorMessage(result.status);
+      const failure = downloadFailure(result);
+      if (failure.kind === "reauth") {
+        showFeedback(status, { state: "warning", title: failure.title, message: failure.message, actionLabel: failure.actionLabel, onAction: () => startReauthentication(status), focusAction: true });
+      } else {
+        showFeedback(status, { state: "error", title: failure.title, message: failure.message });
+      }
       return;
     }
     const configuredOrigin = new URL(window.EUGENIX_PUBLIC_CONFIG.supabaseUrl).origin;
     const signedUrl = safeSignedUrl(result.payload.signedUrl, configuredOrigin);
     if (!signedUrl) throw new Error("INVALID_SIGNED_URL");
-    if (status) status.textContent = "Download ready. Opening the secure file…";
+    showFeedback(status, { state: "info", title: "Opening secure download", message: "Your download is ready." });
     window.location.assign(signedUrl.href);
   } catch {
-    if (status) status.textContent = "The secure download route is unavailable. Please try again later.";
+    showFeedback(status, { state: "error", title: "Download service unavailable", message: "Please try again later." });
   } finally {
     if (button) button.disabled = false;
   }
@@ -138,6 +155,9 @@ async function startDownload() {
 
 document.querySelector("[data-resource-download]")?.addEventListener("click", startDownload);
 document.querySelector("[data-download-sign-in]")?.addEventListener("click", startDownload);
+addButtonIcon(document.querySelector("[data-download-sign-in]"), "google");
+addButtonIcon(document.querySelector("[data-resource-download]"), "download");
+addButtonIcon(document.querySelector(".download-terminal__signout"), "signout");
 
 await initResourceShell();
 initSavedControls();
@@ -160,7 +180,7 @@ if (!slug) {
         if (status) status.textContent = "The resource could not be saved after sign-in.";
       }
     }
-    else setDetailState("missing", "This resource could not be found or is not published.");
+    else setDetailState("missing", "It may have been removed or may not be ready to share yet.");
   } catch {
     console.warn("The resource detail could not be loaded.");
     setDetailState("error", "The resource could not be loaded. Check your connection and try again.");

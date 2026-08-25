@@ -1,5 +1,6 @@
-import { getCurrentSession } from "./auth.js";
+import { getCurrentSession } from "./auth.js?v=20260825r1";
 import { ensureResourceSaved, initSavedStore, isResourceSaved, isSavedStoreLoading, isSavedStoreUnavailable, onSavedStateChange, toggleSavedResource } from "./saved-store.js";
+import { setButtonIcon, showFeedback } from "./feedback.js";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -16,6 +17,7 @@ function syncButton(button) {
   const saved = isResourceSaved(resourceId);
   const loading = Boolean(getCurrentSession()) && isSavedStoreLoading();
   const unavailable = Boolean(getCurrentSession()) && isSavedStoreUnavailable();
+  setButtonIcon(button, saved ? "bookmark-minus" : "save");
   button.disabled = !resourceId || loading || unavailable;
   button.setAttribute("aria-pressed", String(saved));
   button.setAttribute("aria-label", unavailable ? `Saved state unavailable for ${title}` : saved ? `Remove ${title} from Saved` : `Save ${title}`);
@@ -44,13 +46,13 @@ export function initSavedControls() {
     if (!button) return;
     const status = button.parentElement?.querySelector("[data-save-status]");
     button.disabled = true;
-    if (status) status.textContent = getCurrentSession() ? "Updating your library…" : "Opening Google sign-in…";
+    showFeedback(status, { state: "loading", title: getCurrentSession() ? "Updating your saved resources" : "Opening Google sign-in", message: getCurrentSession() ? "Saving your change." : "You will return here after signing in." });
     try {
       const result = await toggleSavedResource(button.dataset.saveResource, button.dataset.returnPath || `${location.pathname}${location.search}${location.hash}`);
-      if (!result.authenticationStarted && status) status.textContent = result.saved ? "Saved to your library." : "Removed from your library.";
+      if (!result.authenticationStarted) showFeedback(status, { state: "success", title: result.saved ? "Saved to your library" : "Removed from your library", message: result.saved ? "You can find this resource in Saved." : "This resource is no longer in Saved." });
     } catch (error) {
       const message = error instanceof Error ? error.message : "";
-      if (status) status.textContent = message === "AUTH_NOT_CONFIGURED" ? "Google sign-in is not configured in this environment." : message === "RESOURCE_UNAVAILABLE" ? "This resource is no longer available to save." : "Saved state could not be updated. Please try again.";
+      showFeedback(status, { state: "error", title: "Saved state could not be updated", message: message === "AUTH_NOT_CONFIGURED" ? "Google sign-in is not configured in this environment." : message === "RESOURCE_UNAVAILABLE" ? "This resource is no longer available to save." : "Please try again." });
     } finally {
       syncButton(button);
     }
@@ -66,6 +68,6 @@ export async function completePendingSave() {
   history.replaceState(null, "", `${target.pathname}${target.search}${target.hash}`);
   const button = document.querySelector(`[data-save-resource="${CSS.escape(resourceId)}"]`);
   const status = button?.parentElement?.querySelector("[data-save-status]");
-  if (status) status.textContent = "Signed in and saved to your library.";
+  showFeedback(status, { state: "success", title: "Signed in successfully", message: "The resource was saved to your library." });
   return true;
 }

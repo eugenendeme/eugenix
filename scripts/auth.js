@@ -1,6 +1,7 @@
 import { getSupabaseClient, isSupabaseConfigured } from "./supabase-client.js";
 
 const RETURN_PATH_KEY = "eugenix.auth.returnPath";
+const AUTH_NOTICE_KEY = "eugenix.auth.noticePath";
 const listeners = new Set();
 let authSubscription;
 let currentSession = null;
@@ -91,12 +92,22 @@ export async function signInWithGoogle(returnPath = `${window.location.pathname}
   if (!client || !isSupabaseConfigured()) throw new Error("AUTH_NOT_CONFIGURED");
   const safeReturnPath = validateInternalPath(returnPath);
   sessionStorage.setItem(RETURN_PATH_KEY, safeReturnPath);
+  sessionStorage.setItem(AUTH_NOTICE_KEY, safeReturnPath);
   const redirectTo = new URL("/resources/", window.location.origin).href;
   const { error } = await client.auth.signInWithOAuth({ provider: "google", options: { redirectTo } });
   if (error) {
     sessionStorage.removeItem(RETURN_PATH_KEY);
+    sessionStorage.removeItem(AUTH_NOTICE_KEY);
     throw new Error("AUTH_START_FAILED");
   }
+}
+
+export function consumeAuthenticationSuccess() {
+  const expectedPath = validateInternalPath(sessionStorage.getItem(AUTH_NOTICE_KEY) || "", "");
+  const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  if (!expectedPath || expectedPath !== currentPath) return false;
+  sessionStorage.removeItem(AUTH_NOTICE_KEY);
+  return true;
 }
 
 export async function signOut() {

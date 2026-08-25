@@ -9,6 +9,8 @@ const { handler, isAuthenticationFresh } = downloadFunction;
 const HOUR_MS = 60 * 60 * 1000;
 const NOW_MS = Date.parse("2026-08-25T12:00:00.000Z");
 const timestampAtAge = (ageMs) => new Date(NOW_MS - ageMs).toISOString();
+const downloadClientSource = await readFile(new URL("./download-client.js", import.meta.url), "utf8");
+const { downloadFailure } = await import(`data:text/javascript;base64,${Buffer.from(downloadClientSource).toString("base64")}`);
 
 assert.equal(isAuthenticationFresh(timestampAtAge(47 * HOUR_MS), NOW_MS), true);
 assert.equal(isAuthenticationFresh(timestampAtAge(48 * HOUR_MS), NOW_MS), false);
@@ -18,8 +20,37 @@ assert.equal(isAuthenticationFresh("not-a-timestamp", NOW_MS), false);
 assert.equal(isAuthenticationFresh(new Date(NOW_MS).toISOString(), NOW_MS), true);
 assert.equal(isAuthenticationFresh(new Date(NOW_MS + 1).toISOString(), NOW_MS), false);
 
+assert.deepEqual(downloadFailure({ status: 401, payload: { code: "reauth_required" } }), {
+  kind: "reauth",
+  title: "Sign in again to continue",
+  message: "For your security, please sign in again before downloading this file.",
+  actionLabel: "Sign in again",
+});
+assert.deepEqual(downloadFailure({ status: 401, payload: {} }), {
+  kind: "authentication",
+  title: "Your session has expired",
+  message: "Sign in again to download this file.",
+});
+assert.deepEqual(downloadFailure({ status: 404, payload: {} }), {
+  kind: "unavailable",
+  title: "Resource unavailable",
+  message: "This resource is no longer available.",
+});
+
 const functionSource = await readFile(new URL("../netlify/functions/resource-download.js", import.meta.url), "utf8");
 assert.match(functionSource, /const DOWNLOAD_TTL_SECONDS = 300;/);
+const detailSource = await readFile(new URL("./resource-detail.js", import.meta.url), "utf8");
+const feedbackSource = await readFile(new URL("./feedback.js", import.meta.url), "utf8");
+const authSource = await readFile(new URL("./auth.js", import.meta.url), "utf8");
+assert.match(detailSource, /failure\.kind === "reauth"/);
+assert.match(detailSource, /actionLabel: failure\.actionLabel/);
+assert.match(detailSource, /focusAction: true/);
+assert.match(detailSource, /signInWithGoogle\(`\$\{window\.location\.pathname\}\?download=1`\)/);
+assert.match(feedbackSource, /setAttribute\("aria-hidden", "true"\)/);
+assert.match(feedbackSource, /action\.textContent = actionLabel/);
+assert.match(feedbackSource, /action\.type = "button"/);
+assert.match(authSource, /target\.origin !== window\.location\.origin/);
+assert.match(authSource, /sessionStorage\.setItem\(AUTH_NOTICE_KEY, safeReturnPath\)/);
 
 const previousFetch = globalThis.fetch;
 const previousEnvironment = {

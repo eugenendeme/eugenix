@@ -83,10 +83,10 @@
 .client-ledger__records { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; border-top: 0; }
 .client-proof { grid-template-columns: minmax(0, 1fr); align-content: space-between; min-height: 10rem; border: 1px solid var(--color-border); padding: 1rem; background: rgba(10, 10, 10, 0.62); }
 .client-proof--primary { grid-column: 1 / -1; background: linear-gradient(135deg, rgba(255, 90, 0, 0.1), transparent 60%), var(--color-bg); }
-.client-field-record { position: relative; min-width: 0; margin: 0; overflow: hidden; border: 1px solid var(--color-border); background: var(--color-bg); }
-.client-field-record img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: center 38%; }
-.client-field-record figcaption { position: absolute; right: 0.65rem; bottom: 0.65rem; left: 0.65rem; display: flex; justify-content: space-between; gap: 0.65rem; color: var(--color-text); font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.06em; text-shadow: 0 1px 0.4rem #000; }
-.client-field-record figcaption span:last-child { color: var(--color-accent); text-align: right; }
+.client-field-record { position: relative; min-width: 0; margin: 0; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.14); background: var(--color-bg); box-shadow: 0.65rem 0.65rem 0 rgba(255, 90, 0, 0.035); }
+.client-field-record::before { position: absolute; z-index: 2; inset: 0.4rem; border: 1px solid rgba(255, 255, 255, 0.08); background: linear-gradient(var(--color-accent), var(--color-accent)) top left / 1.6rem 1px no-repeat, linear-gradient(var(--color-accent), var(--color-accent)) top left / 1px 1.6rem no-repeat; content: ""; opacity: 0.55; pointer-events: none; }
+.client-field-record::after { position: absolute; z-index: 1; inset: 0; background: radial-gradient(ellipse at center, transparent 65%, rgba(3, 3, 3, 0.13) 100%), linear-gradient(180deg, transparent 72%, rgba(5, 5, 5, 0.17) 100%); content: ""; pointer-events: none; }
+.client-field-record img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: center; }
 
 .about-portrait { box-shadow: 0.75rem 0.75rem 0 rgba(255, 90, 0, 0.035), 0 1.25rem 3rem rgba(0, 0, 0, 0.18); }
 .about-story__copy { max-width: 48rem; }

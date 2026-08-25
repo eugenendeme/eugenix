@@ -80,7 +80,7 @@
 .hero__scroll { display: none; }
 
 @media (min-width: 48rem) {
-  .hero__actions { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
+  .hero__actions { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2); }
 }
 @media (min-width: 64rem) {
   .hero { min-height: 100svh; overflow: hidden; }
@@ -130,7 +130,7 @@
   .hero__details { grid-column: 1; grid-template-columns: minmax(12rem, 30rem) auto; align-items: end; gap: clamp(1.5rem, 4vw, 5rem); margin-top: 0; }
   .hero__details > p { max-width: 42ch; color: var(--color-muted); font-size: clamp(0.9rem, 1vw, 1.05rem); }
   .hero__location { width: auto; justify-content: start; gap: clamp(1rem, 2vw, 2.5rem); font-size: var(--text-xs); }
-  .hero__actions { width: min(100%, 25rem); grid-column: 2; grid-row: 3; align-self: end; justify-self: end; margin-top: 0; }
+  .hero__actions { width: min(100%, 36rem); grid-column: 2; grid-row: 3; align-self: end; justify-self: end; margin-top: 0; }
   .hero__scroll { position: absolute; right: 0.25rem; bottom: 8rem; display: flex; align-items: center; gap: 0.8rem; color: var(--color-dim); font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; transform: rotate(90deg); transform-origin: right; }
   .hero__scroll-line { display: block; width: 3rem; height: 1px; overflow: hidden; background: var(--color-border); }
   .hero__scroll-line::after { display: block; width: 45%; height: 100%; background: var(--color-accent); content: ""; }

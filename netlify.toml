@@ -14,29 +14,9 @@ for = "/*"
   X-Content-Type-Options = "nosniff"
 
 [[redirects]]
-from = "/work"
-to = "/work/"
-status = 301
-force = true
-
-
-
-
-
-[[redirects]]
 from = "/resources/:slug/"
 to = "/resources/[slug]/index.html"
 status = 200
-
-
-
-
-
-[[redirects]]
-from = "/resume"
-to = "/resume/"
-status = 301
-force = true
 
 [[redirects]]
 from = "/api/contact"

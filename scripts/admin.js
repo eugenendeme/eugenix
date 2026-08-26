@@ -1,4 +1,4 @@
-import { getCurrentSession, onAuthStateChange } from "./auth.js";
+import { getCurrentSession, onAuthStateChange } from "./auth.js?v=20260825r1";
 import { initResourceShell } from "./resource-shell.js";
 import { checkCurrentAdmin, fetchAdminAnalytics, fetchAdminCategories, fetchAdminResources, saveAdminResource, setResourceArchived, setResourcePublished, updateCategory } from "./admin-data.js";
 

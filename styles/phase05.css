@@ -48,8 +48,19 @@
 .interest-register dd { min-width: 0; font-weight: 700; overflow-wrap: anywhere; }
 .interest-register dd span { display: block; margin-top: 0.35rem; color: var(--color-muted); font-size: var(--text-sm); font-weight: 400; }
 
-.testimonials-system[hidden] { display: none; }
-.testimonial-reel { display: grid; grid-auto-columns: minmax(min(100%, 20rem), 1fr); grid-auto-flow: column; gap: 1px; overflow-x: auto; }
+.testimonials-system { background: var(--color-bg); }
+.testimonials-system__heading > div:last-child { display: grid; gap: 0.75rem; }
+.testimonials-system__heading > div:last-child > p { max-width: 48ch; color: var(--color-muted); }
+.testimonial-grid { display: grid; gap: 0.75rem; margin-top: clamp(2rem, 6vw, 4rem); }
+.testimonial-card { display: inline-grid; width: 100%; min-width: 0; gap: 1.5rem; margin: 0; border: 1px solid var(--color-border); padding: clamp(1rem, 4vw, 1.5rem); background: var(--color-surface); break-inside: avoid; }
+.testimonial-card blockquote { margin: 0; }
+.testimonial-card blockquote p { color: var(--color-text); font-size: clamp(1rem, 2vw, 1.12rem); line-height: 1.7; }
+.testimonial-card figcaption { display: grid; min-width: 0; grid-template-columns: 4.5rem minmax(0, 1fr); align-items: center; gap: 1rem; border-top: 1px solid var(--color-border); padding-top: 1rem; }
+.testimonial-card__portrait { display: block; width: 4.5rem; height: 4.5rem; border: 1px solid var(--color-border); background: var(--color-bg); object-fit: contain; object-position: center; }
+.testimonial-card__initials { display: grid; width: 4.5rem; height: 4.5rem; place-items: center; border: 1px solid var(--color-accent); color: var(--color-accent); font-family: var(--font-mono); font-size: 1rem; font-weight: 700; letter-spacing: 0.08em; }
+.testimonial-card figcaption > span:last-child { display: grid; min-width: 0; gap: 0.3rem; }
+.testimonial-card figcaption strong { font-family: var(--font-display); font-size: 1.15rem; letter-spacing: -0.03em; line-height: 1.05; overflow-wrap: anywhere; text-transform: uppercase; }
+.testimonial-card figcaption small { color: var(--color-muted); font-size: var(--text-xs); line-height: 1.5; overflow-wrap: anywhere; }
 
 .resources-preview { background: var(--color-surface); }
 .resources-preview__heading > div:last-child { min-width: 0; }
@@ -69,7 +80,7 @@
 .contact-layout { display: grid; min-width: 0; gap: clamp(2rem, 9vw, 5rem); }
 .contact-channel { min-width: 0; }
 .contact-channel__label, .contact-form__heading { color: var(--color-accent); font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase; }
-.contact-channel h3 { max-width: 12ch; margin-top: 0.7rem; font-family: var(--font-display); font-size: clamp(1.8rem, 9vw, 3.5rem); letter-spacing: -0.055em; line-height: 0.94; text-transform: uppercase; }
+.contact-channel h2, .contact-channel h3 { max-width: 12ch; margin-top: 0.7rem; font-family: var(--font-display); font-size: clamp(1.8rem, 9vw, 3.5rem); letter-spacing: -0.055em; line-height: 0.94; text-transform: uppercase; }
 .contact-email { display: inline-block; max-width: 100%; margin-top: 1.5rem; border-bottom: 1px solid var(--color-accent); color: var(--color-text); font-size: clamp(0.85rem, 4.3vw, 1.15rem); line-height: 1.5; overflow-wrap: anywhere; text-decoration: none; }
 .contact-socials { margin-top: 2rem; border-top: 1px solid var(--color-border); }
 .contact-socials a { display: flex; min-height: 3rem; min-width: 0; align-items: center; justify-content: space-between; gap: 0.75rem; border-bottom: 1px solid var(--color-border); color: var(--color-text); font-family: var(--font-mono); font-size: var(--text-xs); text-decoration: none; text-transform: uppercase; }
@@ -134,6 +145,8 @@
   .site-footer__identity { padding-bottom: 0; }
   .site-footer__nav, .site-footer__socials { margin-top: 0; border-top-color: var(--color-accent); }
   .site-footer__closing { grid-column: 1 / -1; margin-top: 2rem; border-top: 1px solid var(--color-border); }
+  .testimonial-grid { display: block; column-count: 2; column-gap: 0.75rem; }
+  .testimonial-card { margin-bottom: 0.75rem; }
 }
 
 @media (min-width: 64rem) {

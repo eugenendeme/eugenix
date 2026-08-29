@@ -162,12 +162,13 @@
     max-width: none;
     height: 100vh;
     min-height: 100vh;
+    max-height: 100vh;
     overflow-x: hidden;
     overflow-y: auto;
     background-color: var(--color-bg);
   }
   @supports (height: 100dvh) {
-    body > .primary-nav { height: 100dvh; min-height: 100dvh; }
+    body > .primary-nav { height: 100dvh; min-height: 100dvh; max-height: 100dvh; }
   }
 }
 @media (min-width: 64rem) {
@@ -176,6 +177,8 @@
   .primary-nav {
     position: static;
     display: block;
+    width: auto;
+    margin-left: auto;
     overflow: visible;
     padding: 0;
     visibility: visible;
@@ -185,7 +188,7 @@
     transition: none;
   }
   .primary-nav__meta { display: none; }
-  .primary-nav__list { display: flex; align-items: center; gap: clamp(1rem, 1.6vw, 2rem); padding: 0; }
+  .primary-nav__list { display: flex; align-items: center; justify-content: flex-end; gap: clamp(1rem, 1.6vw, 2rem); padding: 0; }
   .primary-nav__list li, .primary-nav__list li:first-child { border: 0; }
   .primary-nav__list a {
     width: auto;

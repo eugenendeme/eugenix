@@ -9,10 +9,10 @@ const supabaseUrl = (process.env.SUPABASE_URL || "").trim();
 const supabasePublishableKey = (process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY || "").trim();
 
 const rootFiles = ["index.html", "404.html", "favicon.svg", "robots.txt", "sitemap.xml"];
-const routeDirectories = ["admin", "privacy", "resources", "saved", "resume", "terms", "work"];
+const routeDirectories = ["about", "admin", "contact", "privacy", "resources", "saved", "services", "resume", "terms", "work"];
 const assetDirectories = ["assets"];
 const runtimeScripts = [
-  "admin.js", "admin-data.js", "auth.js", "contact.js", "download-client.js", "hero.js", "main.js",
+  "admin.js", "admin-data.js", "auth.js", "contact.js", "download-client.js", "hero.js", "main.js", "testimonials.js",
   "feedback.js", "motion.js", "navigation.js", "process.js", "resource-data.js", "resource-detail.js", "resource-filter.js",
   "resources.js", "resource-shell.js", "saved.js", "saved-controls.js", "saved-data.js", "saved-filter.js",
   "saved-store.js", "supabase-client.js",

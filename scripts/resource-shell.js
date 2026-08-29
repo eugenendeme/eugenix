@@ -1,9 +1,11 @@
 import { initNavigation } from "./navigation.js";
 import { consumeAuthenticationSuccess, initAuth, signInWithGoogle, signOut } from "./auth.js?v=20260825r1";
-import { addButtonIcon, showFeedback } from "./feedback.js";
+import { addButtonIcon, showFeedback } from "./feedback.js?v=20260828f4";
 
 function announce(root, title, state = "info", message = "") {
-  root.querySelectorAll("[data-auth-status]").forEach((node) => { showFeedback(node, { state, title, message }); });
+  root.querySelectorAll("[data-auth-status]").forEach((node) => {
+    showFeedback(node, { state, title, message });
+  });
   if (state) root.dataset.authState = state;
 }
 

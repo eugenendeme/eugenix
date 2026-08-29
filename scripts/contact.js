@@ -1,4 +1,4 @@
-import { addButtonIcon, showFeedback } from "./feedback.js";
+import { addButtonIcon, showFeedback } from "./feedback.js?v=20260828f4";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -48,7 +48,7 @@ function renderErrors(form, errors) {
   });
 }
 
-function setState(form, state, message = "") {
+function setState(form, state, message = "", options = {}) {
   const submit = form.querySelector("[data-contact-submit]");
   const label = form.querySelector("[data-submit-label]");
   const status = form.querySelector("[data-form-status]");
@@ -57,7 +57,7 @@ function setState(form, state, message = "") {
   if (label) label.textContent = state === "submitting" ? "Sending…" : "Send Message";
   if (status && message) {
     const titles = { submitting: "Sending your message", success: "Message sent successfully", error: "Message could not be sent" };
-    showFeedback(status, { state: state === "submitting" ? "loading" : state, title: titles[state] || "Contact update", message });
+    showFeedback(status, { state: state === "submitting" ? "loading" : state, title: titles[state] || "Contact update", message, ...options });
   }
 }
 
@@ -74,7 +74,7 @@ export function initContactForm() {
 
     const firstInvalidName = Object.keys(errors)[0];
     if (firstInvalidName) {
-      setState(form, "error", "Check the highlighted fields and try again.");
+      setState(form, "error", "Check the highlighted fields and try again.", { transient: false });
       const firstInvalid = form.elements.namedItem(firstInvalidName);
       if (firstInvalid instanceof HTMLElement) firstInvalid.focus();
       return;

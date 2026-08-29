@@ -4,23 +4,41 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="description" content="Browse practical EugenIX guides, engineering notes, checklists, prompts, and resources for building digital products.">
+    <meta name="description" content="Eugene Eyambe Ndeme shares practical software engineering guides, notes, checklists, prompts, and resources for building digital products.">
+    <meta name="author" content="Eugene Eyambe Ndeme">
     <link rel="canonical" href="https://eugenix.dev/resources/">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Resource Library | EugenIX">
-    <meta property="og:description" content="Browse practical EugenIX guides, engineering notes, checklists, prompts, and resources for building digital products.">
+    <meta property="og:title" content="Software Engineering Resources by Eugene Eyambe Ndeme | EugenIX">
+    <meta property="og:description" content="Eugene Eyambe Ndeme shares practical software engineering guides, notes, checklists, prompts, and resources for building digital products.">
     <meta property="og:url" content="https://eugenix.dev/resources/">
+    <meta property="og:site_name" content="EugenIX">
+    <meta property="og:image" content="https://eugenix.dev/assets/images/eugene-hero.jpg">
+    <meta property="og:image:alt" content="Portrait of software engineer Eugene Eyambe Ndeme">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Resource Library | EugenIX">
-    <meta name="twitter:description" content="Browse practical guides, engineering notes, checklists, prompts, and resources for building digital products.">
-    <title>Resource Library | EugenIX</title>
+    <meta name="twitter:title" content="Software Engineering Resources by Eugene Eyambe Ndeme | EugenIX">
+    <meta name="twitter:description" content="Practical software engineering guides, notes, checklists, prompts, and resources shared by Eugene Eyambe Ndeme.">
+    <meta name="twitter:image" content="https://eugenix.dev/assets/images/eugene-hero.jpg">
+    <title>Software Engineering Resources by Eugene Eyambe Ndeme | EugenIX</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/styles/main.css?v=20260825r3">
-    <link rel="stylesheet" href="/styles/resources.css?v=20260824r3">
+    <link rel="stylesheet" href="/styles/main.css?v=20260828f1">
+    <link rel="stylesheet" href="/styles/resources.css?v=20260828d1">
     <link rel="stylesheet" href="/styles/premium.css?v=20260825r1">
     <script src="/scripts/public-config.js"></script>
     <script src="/scripts/vendor/supabase.js"></script>
-    <script type="module" src="/scripts/resources.js?v=20260825r1"></script>
+    <script type="module" src="/scripts/resources.js?v=20260828f4"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "@id": "https://eugenix.dev/resources/#page",
+        "url": "https://eugenix.dev/resources/",
+        "name": "Software Engineering Resources by Eugene Eyambe Ndeme",
+        "description": "Practical software engineering guides, notes, checklists, prompts, and resources for building digital products.",
+        "creator": { "@id": "https://eugenix.dev/#eugene-eyambe-ndeme" },
+        "about": { "@id": "https://eugenix.dev/#eugene-eyambe-ndeme" },
+        "isPartOf": { "@id": "https://eugenix.dev/#website" }
+      }
+    </script>
   </head>
   <body class="page page-resources">
     <a class="skip-link" href="#resource-catalog">Skip to resource catalog</a>
@@ -33,10 +51,11 @@
         <nav class="primary-nav resource-nav" id="primary-navigation" aria-label="Primary" data-primary-nav>
           <div class="primary-nav__meta" aria-hidden="true"><span>LIBRARY / NAV</span><span>EUGENIX.DEV</span></div>
           <ul class="primary-nav__list">
-            <li><a data-nav-link href="/work/"><span>01</span>Work</a></li>
-            <li><a data-nav-link href="/resources/" aria-current="page"><span>02</span>Resources</a></li>
+            <li><a data-nav-link href="/"><span>01</span>View Portfolio</a></li>
+            <li><a data-nav-link href="/resources/" aria-current="page"><span>02</span>Free Resources</a></li>
             <li><a data-nav-link href="/saved/"><span>03</span>Saved</a></li>
-            <li><a data-nav-link href="/#contact"><span>04</span>Contact</a></li>
+            <li><a data-nav-link href="/services/"><span>04</span>Services</a></li>
+            <li><a data-nav-link href="/contact/"><span>05</span>Contact</a></li>
           </ul>
           <div class="archive-auth" data-auth-root>
             <p data-auth-loading>AUTH / CHECKING</p>
@@ -52,7 +71,7 @@
       <section class="resource-intro" aria-labelledby="resource-title">
         <div class="container resource-intro__layout">
           <div><p class="system-label">LIB.01 / PUBLIC ENGINEERING ARCHIVE</p><p class="resource-intro__status">PUBLIC METADATA / AUTHENTICATED DOWNLOADS</p></div>
-          <div><h1 id="resource-title">Resource Library.</h1><p>Useful things I have learned, built, and figured out, shared to help with your own work.</p></div>
+          <div><h1 id="resource-title">Resource Library.</h1><p>Useful things I have learned, built, and figured out, shared to help with your own work.</p><a class="portfolio-path" href="/">View Portfolio <span aria-hidden="true">→</span></a></div>
         </div>
       </section>
 
@@ -86,12 +105,12 @@
                 <select id="resource-sort" data-resource-sort><option value="newest">Newest</option><option value="oldest">Oldest</option><option value="az">A–Z</option></select>
               </div>
               <div class="archive-state archive-state--loading" data-catalog-loading role="status" aria-live="polite"><p class="archive-state__code">QUERY / PUBLISHED RESOURCES</p><h3>Opening the library…</h3><p>Loading published resources and categories.</p></div>
-              <div class="archive-state archive-state--error" data-catalog-error role="status" aria-live="polite" hidden><p class="archive-state__code">CATALOG / UNAVAILABLE</p><h3>The library cannot be reached.</h3><p>Check your connection and try again. You can still see the library categories here.</p></div>
+              <div class="archive-state archive-state--error" data-catalog-error role="status" aria-live="polite" hidden><p class="archive-state__code">CATALOG / UNAVAILABLE</p><h3>We could not load the library right now.</h3><p>Check your connection, then try again. You can still see the library categories here.</p><button class="archive-state__action" type="button" data-catalog-retry>Try again</button></div>
               <div class="archive-state archive-state--empty" data-catalog-empty role="status" aria-live="polite" hidden><p class="archive-state__code">CATALOG / 00 PUBLISHED RECORDS</p><h3>The library is being built.</h3><p>Guides, notes, checklists, prompts, and practical resources will appear here as they are published.</p></div>
               <div class="archive-results" data-catalog-results hidden>
                 <div class="archive-results__summary"><p>PUBLISHED RESOURCES</p><span data-result-count>0 resources</span></div>
                 <ol class="archive-resource-list" data-resource-list></ol>
-                <div class="archive-state archive-state--no-results" data-no-results hidden><p class="archive-state__code">FILTER / 00 MATCHES</p><h3>No resources match.</h3><p>Change the search terms or category filter and try again.</p></div>
+                <div class="archive-state archive-state--no-results" data-no-results role="status" aria-live="polite" hidden><p class="archive-state__code" data-no-results-code>FILTER / 00 MATCHES</p><h3 data-no-results-title>No resources match.</h3><p data-no-results-message>Change the search terms or category filter and try again.</p><button class="archive-state__action" type="button" data-clear-discovery>Show all resources</button></div>
               </div>
             </div>
             <aside class="archive-index" aria-labelledby="taxonomy-title">
@@ -103,6 +122,6 @@
       </section>
     </main>
 
-    <footer class="resource-footer"><div class="container"><p>EUGENIX / RESOURCE LIBRARY</p><a href="/">Return to portfolio →</a></div></footer>
+    <footer class="resource-footer"><div class="container"><p>EUGENIX / RESOURCE LIBRARY</p><a href="/">View Portfolio →</a></div></footer>
   </body>
 </html>

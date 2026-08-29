@@ -55,6 +55,7 @@
 .archive-filter[aria-pressed="true"] { border-color: var(--color-accent); background: var(--color-accent); color: var(--color-accent-ink); }
 .archive-state { min-width: 0; margin-top: 1.75rem; border: 1px solid var(--color-border); padding: clamp(1rem, 5vw, 2.25rem); background: var(--color-surface); }
 .archive-state > p:last-child { font-size: 1rem; }
+.archive-state__action { min-height: 2.75rem; margin-top: 1rem; border: 1px solid var(--color-accent); padding: 0.65rem 1rem; background: transparent; color: var(--color-text); cursor: pointer; font: inherit; font-weight: 700; }
 .archive-state--loading { border-top-color: var(--color-accent); }
 .archive-state--error { border-color: #74402d; }
 .archive-state--empty { min-height: 17rem; }
@@ -99,6 +100,10 @@
 .resource-document__metadata div { min-width: 0; padding-block: 0.9rem; border-bottom: 1px solid var(--color-border); }
 .resource-document__tags { margin-top: 1.5rem; }
 .resource-document__save { max-width: 22rem; margin-top: 1.25rem; }
+.resource-share { display: flex; min-width: 0; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; margin-top: 1.5rem; border-top: 1px solid var(--color-border); padding-top: 1.25rem; }
+.resource-share[hidden] { display: none; }
+.resource-share .archive-state__action { margin-top: 0; }
+.resource-share p { color: var(--color-muted); line-height: 1.5; overflow-wrap: anywhere; }
 .download-terminal { min-width: 0; border: 1px solid var(--color-border); padding: clamp(1rem, 5vw, 2rem); background: rgba(16, 16, 16, 0.96); }
 .download-terminal h2 { max-width: 100%; margin-top: 0.6rem; font-family: var(--font-display); font-size: clamp(1.75rem, 8vw, 2.8rem); letter-spacing: -0.055em; line-height: 0.95; text-transform: uppercase; }
 .download-terminal > p:not(.download-terminal__code):not(.download-terminal__status):not(.download-terminal__auth) { margin-top: 0.85rem; color: var(--color-muted); font-size: 1rem; line-height: 1.65; }
@@ -155,7 +160,7 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .archive-filter:hover, .archive-auth button:hover { border-color: var(--color-accent); color: var(--color-text); }
+  .archive-filter:hover, .archive-auth button:hover, .archive-state__action:hover { border-color: var(--color-accent); color: var(--color-accent); }
   .archive-filter[aria-pressed="true"]:hover { color: var(--color-accent-ink); }
   .archive-resource__link:hover, .resource-back:hover, .resource-footer a:hover { color: var(--color-accent); }
   .save-control:hover { border-color: var(--color-accent); }

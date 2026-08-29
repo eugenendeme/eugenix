@@ -1,10 +1,10 @@
 import { getCurrentSession, onAuthStateChange, signInWithGoogle } from "./auth.js?v=20260825r1";
 import { fetchPublishedResourceBySlug } from "./resource-data.js";
-import { initResourceShell } from "./resource-shell.js?v=20260825r1";
+import { initResourceShell } from "./resource-shell.js?v=20260828f4";
 import { isSupabaseConfigured } from "./supabase-client.js";
 import { downloadFailure, requestResourceDownload, safeSignedUrl } from "./download-client.js?v=20260825r1";
-import { completePendingSave, configureSaveButton, initSavedControls, saveReturnPath } from "./saved-controls.js?v=20260825r1";
-import { addButtonIcon, showFeedback } from "./feedback.js";
+import { completePendingSave, configureSaveButton, initSavedControls, saveReturnPath } from "./saved-controls.js?v=20260828f4";
+import { addButtonIcon, showFeedback } from "./feedback.js?v=20260828f4";
 
 let resource = null;
 
@@ -78,6 +78,39 @@ function renderResource(item) {
   const download = document.querySelector("[data-resource-download]");
   if (download) download.disabled = false;
   document.title = `${String(item.title)} | EugenIX Resources`;
+  const descriptionText = String(item.teaser || item.description || "View a practical EugenIX resource.").trim();
+  const publicUrl = new URL(`/resources/${encodeURIComponent(item.slug)}/`, window.location.origin).href;
+  document.querySelector('meta[name="description"]')?.setAttribute("content", descriptionText);
+  document.querySelector('meta[property="og:title"]')?.setAttribute("content", document.title);
+  document.querySelector('meta[property="og:description"]')?.setAttribute("content", descriptionText);
+  document.querySelector('meta[property="og:url"]')?.setAttribute("content", publicUrl);
+  document.querySelector('meta[name="twitter:title"]')?.setAttribute("content", document.title);
+  document.querySelector('meta[name="twitter:description"]')?.setAttribute("content", descriptionText);
+  document.querySelector('meta[name="robots"]')?.setAttribute("content", "index,follow");
+  document.querySelector('link[rel="canonical"]')?.setAttribute("href", publicUrl);
+  const breadcrumb = document.querySelector("[data-resource-breadcrumb]");
+  if (breadcrumb) breadcrumb.textContent = String(item.title);
+  document.querySelector("[data-resource-share]")?.removeAttribute("hidden");
+}
+
+async function shareResource() {
+  if (!resource) return;
+  const status = document.querySelector("[data-share-status]");
+  const url = new URL(`/resources/${encodeURIComponent(resource.slug)}/`, window.location.origin).href;
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: String(resource.title), text: String(resource.teaser || ""), url });
+      showFeedback(status, { state: "success", title: "Resource shared", message: "The resource was shared successfully." });
+    }
+    else {
+      if (!navigator.clipboard?.writeText) throw new Error("COPY_UNAVAILABLE");
+      await navigator.clipboard.writeText(url);
+      showFeedback(status, { state: "success", title: "Resource link copied", message: "The link is ready to paste." });
+    }
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") return;
+    showFeedback(status, { state: "error", title: "Resource could not be shared", message: "Copy the link from your browser address bar." });
+  }
 }
 
 function setDetailState(name, message) {
@@ -154,6 +187,7 @@ async function startDownload() {
 }
 
 document.querySelector("[data-resource-download]")?.addEventListener("click", startDownload);
+document.querySelector("[data-share-resource]")?.addEventListener("click", shareResource);
 document.querySelector("[data-download-sign-in]")?.addEventListener("click", startDownload);
 addButtonIcon(document.querySelector("[data-download-sign-in]"), "google");
 addButtonIcon(document.querySelector("[data-resource-download]"), "download");
@@ -177,7 +211,7 @@ if (!slug) {
         await completePendingSave();
       } catch {
         const status = document.querySelector(".resource-document__save [data-save-status]");
-        if (status) status.textContent = "The resource could not be saved after sign-in.";
+        showFeedback(status, { state: "error", title: "Resource could not be saved", message: "Please try saving it again." });
       }
     }
     else setDetailState("missing", "It may have been removed or may not be ready to share yet.");

@@ -1,8 +1,8 @@
 import { getCurrentSession, onAuthStateChange } from "./auth.js?v=20260825r1";
-import { initResourceShell } from "./resource-shell.js?v=20260825r1";
+import { initResourceShell } from "./resource-shell.js?v=20260828f4";
 import { fetchSavedResources, unsaveResource } from "./saved-data.js";
 import { filterSavedRecords, savedResourceOf } from "./saved-filter.js";
-import { addButtonIcon, showFeedback } from "./feedback.js";
+import { addButtonIcon, showFeedback } from "./feedback.js?v=20260828f4";
 
 const state = { records: [], query: "", category: "all", requestVersion: 0 };
 
@@ -85,6 +85,7 @@ async function loadSaved(session) {
 }
 
 document.querySelector("[data-saved-search]")?.addEventListener("input", (event) => { state.query = event.target.value; renderRecords(); });
+document.querySelector("[data-saved-retry]")?.addEventListener("click", () => { loadSaved(getCurrentSession()); });
 document.querySelector("[data-saved-category]")?.addEventListener("change", (event) => { state.category = event.target.value; renderRecords(); });
 document.querySelector("[data-saved-list]")?.addEventListener("click", async (event) => {
   const button = event.target.closest("[data-unsave-resource]");

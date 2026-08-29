@@ -35,6 +35,10 @@ const robots = await read("robots.txt");
 const adminHtml = await read("admin/index.html");
 const savedHtml = await read("saved/index.html");
 const resourcesHtml = await read("resources/index.html");
+const homepageHtml = await read("index.html");
+const feedback = await read("scripts/feedback.js");
+const contactClient = await read("scripts/contact.js");
+const adminClient = await read("scripts/admin.js");
 
 assert.match(archiveMigration, /archived_at timestamptz/);
 assert.match(archiveMigration, /archived_at is null or published = false/);
@@ -50,12 +54,23 @@ assert.match(netlify, /X-Content-Type-Options = "nosniff"/);
 assert.match(netlify, /Referrer-Policy = "strict-origin-when-cross-origin"/);
 assert.match(netlify, /Permissions-Policy/);
 assert.doesNotMatch(sitemap, /\/admin\/|\/saved\//);
-assert.match(robots, /Disallow: \/admin\//);
-assert.match(robots, /Disallow: \/saved\//);
+assert.doesNotMatch(robots, /Disallow: \/admin\/|Disallow: \/saved\//);
+assert.match(robots, /Sitemap: https:\/\/eugenix\.dev\/sitemap\.xml/);
 assert.match(adminHtml, /name="robots" content="noindex,nofollow"/);
 assert.match(savedHtml, /name="robots" content="noindex,nofollow"/);
+assert.equal((homepageHtml.match(/<figure class="testimonial-feature(?: is-active)?" data-testimonial/g) || []).length, 5);
+assert.equal((homepageHtml.match(/class="capability-orbit__item/g) || []).length, 5);
+assert.match(homepageHtml, /Eugene Eyambe Ndeme/);
+assert.match(homepageHtml, /Interactive frontend prototype/);
+assert.match(homepageHtml, /assets\/images\/testimonials\/tracy-takang\.jpg/);
 assert.match(resourcesHtml, /rel="canonical" href="https:\/\/eugenix\.dev\/resources\/"/);
 assert.match(resourcesHtml, /property="og:title"/);
+assert.match(feedback, /const FEEDBACK_DISMISS_DELAY = 10000;/);
+assert.match(feedback, /state !== "loading" && !hasAction/);
+assert.match(feedback, /dismissTimers\.get\(target\) !== notice/);
+assert.match(feedback, /export function showTextFeedback/);
+assert.match(contactClient, /transient: false/);
+assert.match(adminClient, /showTextFeedback/);
 
 const event = (body, method = "POST") => ({
   httpMethod: method,

@@ -1,8 +1,9 @@
-import { initResourceShell } from "./resource-shell.js?v=20260825r1";
+import { initResourceShell } from "./resource-shell.js?v=20260828f4";
 import { fetchCategories, fetchPublishedResources } from "./resource-data.js";
 import { isSupabaseConfigured } from "./supabase-client.js";
 import { categoryOf, filterAndSortResources } from "./resource-filter.js";
-import { completePendingSave, configureSaveButton, initSavedControls, saveReturnPath } from "./saved-controls.js?v=20260825r1";
+import { completePendingSave, configureSaveButton, initSavedControls, saveReturnPath } from "./saved-controls.js?v=20260828f4";
+import { showFeedback } from "./feedback.js?v=20260828f4";
 
 const FALLBACK_CATEGORIES = [
   { slug: "documentation", name: "Documentation" },
@@ -123,6 +124,16 @@ function renderResources() {
   list.replaceChildren(...resources.map(resourceRow));
   list.hidden = resources.length === 0;
   empty.hidden = resources.length !== 0;
+  if (!resources.length) {
+    const hasQuery = Boolean(state.query.trim());
+    const filteredCategory = state.category !== "all";
+    const code = document.querySelector("[data-no-results-code]");
+    const title = document.querySelector("[data-no-results-title]");
+    const message = document.querySelector("[data-no-results-message]");
+    if (code) code.textContent = hasQuery ? "SEARCH / 00 MATCHES" : "CATEGORY / 00 MATCHES";
+    if (title) title.textContent = hasQuery ? "No resources match your search." : filteredCategory ? "No resources in this category yet." : "No resources match.";
+    if (message) message.textContent = hasQuery ? "Try a different word or clear the search." : "Choose another category or show all resources.";
+  }
   if (count) count.textContent = `${resources.length} ${resources.length === 1 ? "resource" : "resources"}`;
 }
 
@@ -133,6 +144,10 @@ async function initCatalog() {
   const errorState = document.querySelector("[data-catalog-error]");
   const emptyState = document.querySelector("[data-catalog-empty]");
   const taxonomy = document.querySelector("[data-taxonomy]");
+  if (loading) loading.hidden = false;
+  if (errorState) errorState.hidden = true;
+  if (emptyState) emptyState.hidden = true;
+  document.querySelector("[data-catalog-results]")?.setAttribute("hidden", "");
   if (fallback) fallback.hidden = true;
   if (application) application.hidden = false;
 
@@ -151,6 +166,7 @@ async function initCatalog() {
     state.categories = categories.length ? categories : FALLBACK_CATEGORIES;
     state.resources = resources;
     if (loading) loading.hidden = true;
+    document.querySelectorAll("[data-resource-search], [data-resource-sort]").forEach((control) => { control.disabled = false; });
     if (taxonomy) renderTaxonomy(taxonomy, state.categories.map((category) => category.name), categories.length === 0);
     renderFilters(categories.length === 0);
     if (!resources.length) {
@@ -170,6 +186,16 @@ async function initCatalog() {
   }
 }
 
+document.querySelector("[data-catalog-retry]")?.addEventListener("click", () => { initCatalog(); });
+document.querySelector("[data-clear-discovery]")?.addEventListener("click", () => {
+  state.category = "all";
+  state.query = "";
+  const search = document.querySelector("[data-resource-search]");
+  if (search) search.value = "";
+  renderFilters();
+  renderResources();
+});
+
 document.querySelector("[data-resource-search]")?.addEventListener("input", (event) => {
   state.query = event.target.value.trim();
   renderResources();
@@ -186,5 +212,5 @@ try {
   await completePendingSave();
 } catch {
   const pendingStatus = document.querySelector("[data-save-status]");
-  if (pendingStatus) pendingStatus.textContent = "The resource could not be saved after sign-in.";
+  showFeedback(pendingStatus, { state: "error", title: "Resource could not be saved", message: "Please try saving it again." });
 }

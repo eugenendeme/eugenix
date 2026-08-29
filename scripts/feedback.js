@@ -1,4 +1,6 @@
 const SVG_NS = "http://www.w3.org/2000/svg";
+const FEEDBACK_DISMISS_DELAY = 10000;
+const dismissTimers = new WeakMap();
 
 const ICON_PATHS = {
   "bookmark-minus": ["M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z", "M9 10h6"],
@@ -67,10 +69,46 @@ export function setButtonIcon(button, name) {
   button.classList.add("button--with-icon");
 }
 
-export function showFeedback(target, { state = "info", title, message = "", actionLabel = "", onAction, focusAction = false } = {}) {
+function clearDismissTimer(target) {
+  const previousTimer = dismissTimers.get(target);
+  if (previousTimer) clearTimeout(previousTimer.id);
+  dismissTimers.delete(target);
+}
+
+function scheduleDismiss(target, owner, dismiss, delay = FEEDBACK_DISMISS_DELAY) {
+  if (!(delay > 0)) return;
+  const notice = { id: 0, owner };
+  notice.id = window.setTimeout(() => {
+    if (dismissTimers.get(target) !== notice || notice.owner !== owner) return;
+    dismiss();
+    dismissTimers.delete(target);
+  }, delay);
+  dismissTimers.set(target, notice);
+}
+
+export function showTextFeedback(target, message, options = {}) {
+  if (!target) return;
+  clearDismissTimer(target);
+  target.hidden = false;
+  target.textContent = message;
+  if (options.transient === false || !message) return;
+  const owner = Symbol("text-feedback");
+  scheduleDismiss(target, owner, () => {
+    target.hidden = true;
+    target.textContent = "";
+  }, options.dismissAfter ?? FEEDBACK_DISMISS_DELAY);
+}
+
+export function showFeedback(target, options = {}) {
+  const { state = "info", title, message = "", actionLabel = "", onAction, focusAction = false } = options;
+  const hasAction = Boolean(actionLabel && typeof onAction === "function");
+  const transient = options.transient ?? (state !== "loading" && !hasAction);
+  const dismissAfter = options.dismissAfter ?? FEEDBACK_DISMISS_DELAY;
   if (!target || !title) return null;
+  clearDismissTimer(target);
+  target.hidden = false;
   target.classList.add("feedback-panel");
-  target.classList.toggle("feedback-panel--action", Boolean(actionLabel && typeof onAction === "function"));
+  target.classList.toggle("feedback-panel--action", hasAction);
   target.dataset.feedbackState = state;
   target.setAttribute("role", state === "error" || state === "warning" ? "alert" : "status");
   target.setAttribute("aria-live", state === "error" || state === "warning" ? "assertive" : "polite");
@@ -87,7 +125,7 @@ export function showFeedback(target, { state = "info", title, message = "", acti
   }
   target.replaceChildren(createIcon(iconName), copy);
   let action = null;
-  if (actionLabel && typeof onAction === "function") {
+  if (hasAction) {
     action = document.createElement("button");
     action.type = "button";
     action.className = "feedback-panel__action";
@@ -95,6 +133,16 @@ export function showFeedback(target, { state = "info", title, message = "", acti
     action.addEventListener("click", onAction, { once: true });
     target.append(action);
     if (focusAction) action.focus();
+  }
+  if (transient && dismissAfter > 0) {
+    const content = target.firstElementChild;
+    scheduleDismiss(target, content, () => {
+      if (target.firstElementChild !== content) return;
+      target.hidden = true;
+      target.replaceChildren();
+      target.classList.remove("feedback-panel", "feedback-panel--action");
+      delete target.dataset.feedbackState;
+    }, dismissAfter);
   }
   return action;
 }
